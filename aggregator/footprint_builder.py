@@ -1,3 +1,6 @@
+import os
+import json
+import logging
 from decimal import Decimal
 from typing import Callable, Optional
 from core.models import Trade, FootprintCandle, FootprintLevel
@@ -23,7 +26,19 @@ class FootprintBuilder:
         # 2. CANDLE MANAGEMENT: Check if we need a new 15m candle
         if self.current_candle is None or self.current_candle.start_time != candle_start_time:
             if self.current_candle is not None:
+                
                 # Can add to databsase or perform final calculations on the closed candle here
+
+                """ Save the closed candle to a JSONL file """
+                os.makedirs("data", exist_ok=True)
+                filename = "data/footprint_history.jsonl"
+                with open(filename, "a") as f:
+                    json_string = json.dumps(self.current_candle.to_dict())
+                    f.write(json_string + "\n")
+
+                # Logging 
+                logging.info(f"[ARCHIVE] Append closed {self.current_candle.start_time} candle to {filename}")
+
                 print(f"\n[CLOSED] 15m Candle at {self.current_candle.start_time} closed.\n")
             
             # Open the new candle

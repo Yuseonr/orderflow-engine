@@ -74,3 +74,27 @@ class FootprintCandle:
     def delta(self) -> Decimal:
         """The overall delta (Buy Volume - Sell Volume) for the entire candle."""
         return self.total_buy_volume - self.total_sell_volume
+    
+    # Convertion method to make it JSON serializable for storage 
+    def to_dict(self) -> dict:
+        """Converts the candle into a JSON dictionary."""
+        return {
+            "start_time": self.start_time,
+            "open": str(self.open),
+            "high": str(self.high),
+            "low": str(self.low),
+            "close": str(self.close),
+            "total_volume": str(self.total_volume),
+            "total_buy_volume": str(self.total_buy_volume),
+            "total_sell_volume": str(self.total_sell_volume),
+            "delta": str(self.delta),
+            "levels": {
+                str(price): {
+                    "buy_volume": str(level.buy_volume),
+                    "sell_volume": str(level.sell_volume),
+                    "total_volume": str(level.total_volume),
+                    "delta": str(level.delta)
+                }
+                for price, level in self.levels.items()
+            }
+        }
