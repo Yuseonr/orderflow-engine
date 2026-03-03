@@ -1,3 +1,4 @@
+import asyncio
 from core.models import FootprintCandle
 
 def clear_terminal():
@@ -53,3 +54,10 @@ def print_live_footprint(candle: FootprintCandle):
         
     print("=" * 63)
     print("Waiting for next trade...")
+
+async def run_interface_loop(get_candle_func, refresh_rate: float = 0.5):
+    while True:
+        candle = get_candle_func()
+        if candle:
+            print_live_footprint(candle)
+        await asyncio.sleep(refresh_rate)

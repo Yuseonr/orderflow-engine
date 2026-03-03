@@ -16,6 +16,10 @@ class FootprintBuilder:
         self.interval_ms = interval_ms
         self.on_signal_update = on_signal_update
         self.current_candle: Optional[FootprintCandle] = None
+    
+    def get_current_candle(self) -> Optional[FootprintCandle]:
+        """Returns the current live candle. """
+        return self.current_candle
 
     def process_trade(self, trade: Trade):
         """Takes a raw trade and integrates it into the footprint."""
