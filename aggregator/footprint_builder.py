@@ -6,7 +6,7 @@ from typing import Callable, Optional
 from core.models import Trade, FootprintCandle, FootprintLevel
 
 class FootprintBuilder:
-    def __init__(self, tick_size: Decimal, interval_ms: int, on_signal_update: Callable):
+    def __init__(self, tick_size: Decimal, interval_ms: int, on_signal_update: Optional[Callable] = None):
         """
         :param tick_size: The price grouping bracket (e.g., Decimal('5.0'))
         :param interval_ms: Candle length in milliseconds (15m = 900,000 ms)
@@ -80,5 +80,6 @@ class FootprintBuilder:
             level.sell_volume += trade.size
 
         # 7. TRIGGER SIGNAL LAYER
-        # Pass the live, updating candle to your signal logic
-        self.on_signal_update(self.current_candle)
+        # Pass the live, updating candle to your signal logic if theres any
+        if self.on_signal_update:
+            self.on_signal_update(self.current_candle)
