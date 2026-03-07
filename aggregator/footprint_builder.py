@@ -6,15 +6,17 @@ from typing import Callable, Optional
 from core.models import Trade, FootprintCandle, FootprintLevel
 
 class FootprintBuilder:
-    def __init__(self, tick_size: Decimal, interval_ms: int, on_signal_update: Optional[Callable] = None):
+    def __init__(self, tick_size: Decimal, interval_ms: int, on_signal_update: Optional[Callable] = None, on_candle_close: Optional[Callable] = None):
         """
         :param tick_size: The price grouping bracket (e.g., Decimal('5.0'))
         :param interval_ms: Candle length in milliseconds (15m = 900,000 ms)
         :param on_signal_update: A function to call every time the candle updates
+        :param on_candle_close: A function to call when a candle is closed
         """
         self.tick_size = tick_size
         self.interval_ms = interval_ms
         self.on_signal_update = on_signal_update
+        self.on_candle_close = on_candle_close
         self.current_candle: Optional[FootprintCandle] = None
     
     def get_current_candle(self) -> Optional[FootprintCandle]:
@@ -39,6 +41,10 @@ class FootprintBuilder:
                 with open(filename, "a") as f:
                     json_string = json.dumps(self.current_candle.to_dict())
                     f.write(json_string + "\n")
+                
+                """ Signal evaluation on closed candle """
+                if self.on_candle_close:
+                    self.on_candle_close(self.current_candle)
 
                 # Logging 
                 logging.info(f"[ARCHIVE] Append closed {self.current_candle.start_time} candle to {filename}")
