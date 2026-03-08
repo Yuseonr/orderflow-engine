@@ -6,12 +6,13 @@ from decimal import Decimal
 from streams.binance_client import BinanceWebsocketClient
 from aggregator.footprint_builder import FootprintBuilder
 from utils.interface import run_interface_loop
+from signals import SignalManager, PocWickSignal
 
 # --- CONFIGURATION ---
 SYMBOL = "btcusdt"              # symbol to subscribe to (e.g., 'btcusdt' or 'ethusdt')
 TICK_SIZE = Decimal("5.0")      # Group trades into $5 buckets
 INTERVAL_MS = 15 * 60 * 1000    # 15 minutes in milliseconds (900,000)
-FPS = 4
+FPS = 1
 
 refresh_rate = 1 / FPS
 
@@ -24,6 +25,10 @@ logging.basicConfig(
 
 async def main():
     print(f"Starting Orderflow Engine for {SYMBOL.upper()}...")
+
+    # Signal Manager
+    signal_manager = SignalManager()
+    signal_manager.register(PocWickSignal())
     
     # Aggregator
     # We pass our display function as the callback. Every time a trade is 
@@ -31,6 +36,7 @@ async def main():
     builder = FootprintBuilder(
         tick_size=TICK_SIZE,
         interval_ms=INTERVAL_MS,
+        on_candle_close=signal_manager.evaluate_all
     )
     
     # Initialize the Websocket Client
