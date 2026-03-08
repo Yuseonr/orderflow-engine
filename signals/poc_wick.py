@@ -4,8 +4,8 @@ from signals.base_signal import BaseSignal, SignalResult
 class PocWickSignal(BaseSignal):
     """
     This signal identifies when the Point of Control (POC) is on a candle's wick.\n
-    Bullish : Green candle with POC on the lower wick (POC price < Open)
-    Bearish : Red candle with POC on the upper wick (POC price > Open)
+    Bullish : POC on the lower wick (POC < body_low)
+    Bearish : POC on the upper wick (POC > body_high)
     """
     def __init__(self):
         super().__init__(name="POC_ON_WICK")
@@ -19,13 +19,13 @@ class PocWickSignal(BaseSignal):
         poc_level = max(candle.levels.values(), key=lambda lvl: lvl.total_volume)
         poc_price = poc_level.price
 
-        # candle color
-        is_green = candle.close > candle.open
-        is_red = candle.close < candle.open
+        # candle body
+        body_low = min(candle.open, candle.close)
+        body_high = max(candle.open, candle.close)
 
         # Bullish
-        if is_green and poc_price < candle.open:
-            msg = f"Bullish: POC at {poc_price} wick below Open {candle.open}. Delta: {poc_level.delta}"
+        if poc_price < body_low:
+            msg = f"Bullish: POC at {poc_price} wick below body_low {body_low}. Delta: {poc_level.delta}"
             return SignalResult(
                 signal_name=self.name,
                 timestamp=candle.start_time,
@@ -35,8 +35,8 @@ class PocWickSignal(BaseSignal):
             )
 
         # Bearish
-        elif is_red and poc_price > candle.open:
-            msg = f"Bearish: POC at {poc_price} wick above Open {candle.open}. Delta: {poc_level.delta}"
+        elif poc_price > body_high:
+            msg = f"Bearish: POC at {poc_price} wick above body_high {body_high}. Delta: {poc_level.delta}"
             return SignalResult(
                 signal_name=self.name,
                 timestamp=candle.start_time,
@@ -51,5 +51,5 @@ class PocWickSignal(BaseSignal):
             timestamp=candle.start_time,
             is_triggered=False,
             direction=None,
-            message="POC inside body or Doji candle"
+            message="POC inside body"
         )
