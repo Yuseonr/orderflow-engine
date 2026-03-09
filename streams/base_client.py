@@ -1,5 +1,5 @@
 import asyncio
-import logging
+from utils.logger import ENGINE_LOGGER 
 from abc import ABC, abstractmethod
 from typing import Callable
 import websockets
@@ -32,7 +32,7 @@ class BaseWebsocketClient(ABC):
             try:
                 # The 'async with' block ensures the socket is cleanly closed if errors occur
                 async with websockets.connect(self.url) as ws:
-                    logging.info(f"Successfully connected to {self.url}")
+                    ENGINE_LOGGER.info(f"Successfully connected to {self.url}")
                     
                     # Listen for messages until the connection is closed or an error occurs
                     while self.is_running:
@@ -41,13 +41,13 @@ class BaseWebsocketClient(ABC):
                         await self.process_message(message)
                         
             except ConnectionClosed as e:
-                logging.warning(f"Websocket connection closed: {e}. Reconnecting in 3 seconds...")
+                ENGINE_LOGGER.warning(f"Websocket connection closed: {e}. Reconnecting in 3 seconds...")
                 await asyncio.sleep(3)
             except Exception as e:
-                logging.error(f"Unexpected error in websocket loop: {e}. Reconnecting in 5 seconds...")
+                ENGINE_LOGGER.error(f"Unexpected error in websocket loop: {e}. Reconnecting in 5 seconds...")
                 await asyncio.sleep(5)
 
     def stop(self):
         """Gracefully signals the loop to shut down."""
-        logging.info("Initiating websocket shutdown...")
+        ENGINE_LOGGER.info("Initiating websocket shutdown...")
         self.is_running = False

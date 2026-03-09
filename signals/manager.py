@@ -1,6 +1,7 @@
-import logging
 from core.models import FootprintCandle
 from signals.base_signal import BaseSignal
+from utils.convert_time import convert_time
+from utils.logger import ENGINE_LOGGER, SIGNAL_LOGGER
 
 class SignalManager:
     """
@@ -16,7 +17,7 @@ class SignalManager:
         Adds an instantiated signal to the manager's signal list.
         """
         self.signals.append(signal)
-        logging.info(f"Registered Signal: {signal.name}")
+        ENGINE_LOGGER.info(f"Registered Signal: {signal.name}")
 
     def evaluate_all(self, closed_candle: FootprintCandle):
         """
@@ -28,10 +29,10 @@ class SignalManager:
                 if result.is_triggered:
 
                     # Can add other alrt mechanism here like Telegram, Discord. 
-                    logging.info(
-                        f"[SIGNAL ALERT] {result.timestamp} | {result.signal_name} "
+                    SIGNAL_LOGGER.info(
+                        f"[SIGNAL ALERT] {convert_time(result.timestamp,7)} | {result.signal_name} "
                         f"| {result.direction} | {result.message}"
                     )
 
             except Exception as e:
-                logging.error(f"Error evaluating signal {signal.name}: {e}")
+                ENGINE_LOGGER.error(f"Error evaluating signal {signal.name}: {e}")

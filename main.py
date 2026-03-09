@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from decimal import Decimal
 
 # Import  modules
@@ -15,13 +14,6 @@ INTERVAL_MS = 15 * 60 * 1000    # 15 minutes in milliseconds (900,000)
 FPS = 1
 
 refresh_rate = 1 / FPS
-
-logging.basicConfig(
-    level=logging.INFO, 
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='engine.log',  
-    filemode='a'
-)
 
 async def main():
     print(f"Starting Orderflow Engine for {SYMBOL.upper()}...")

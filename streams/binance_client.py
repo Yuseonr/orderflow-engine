@@ -1,5 +1,5 @@
 import json
-import logging
+from utils.logger import ENGINE_LOGGER
 from decimal import Decimal
 from typing import Callable
 from core.models import Trade
@@ -37,6 +37,6 @@ class BinanceWebsocketClient(BaseWebsocketClient):
             )
             self.on_trade_callback(trade)
         except KeyError as e:
-            logging.error(f"Missing expected key in Binance message: {e} - Message: {message}")
+            ENGINE_LOGGER.error(f"Missing expected key in Binance message: {e} - Message: {message}")
         except Exception as e:
-            logging.error(f"Error processing Binance message: {e} - Message: {message}")
+            ENGINE_LOGGER.error(f"Error processing Binance message: {e} - Message: {message}")

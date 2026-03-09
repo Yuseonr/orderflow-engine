@@ -1,6 +1,6 @@
 import os
 import json
-import logging
+from utils.logger import ENGINE_LOGGER
 from decimal import Decimal
 from typing import Callable, Optional
 from core.models import Trade, FootprintCandle, FootprintLevel
@@ -47,7 +47,7 @@ class FootprintBuilder:
                     self.on_candle_close(self.current_candle)
 
                 # Logging 
-                logging.info(f"[ARCHIVE] Append closed {self.current_candle.start_time} candle to {filename}")
+                ENGINE_LOGGER.info(f"[ARCHIVE] Append closed {self.current_candle.start_time} candle to {filename}")
 
                 print(f"\n[CLOSED] 15m Candle at {self.current_candle.start_time} closed.\n")
             
