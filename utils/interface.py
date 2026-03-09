@@ -1,5 +1,6 @@
 import asyncio
 from core.models import FootprintCandle
+from utils.convert_time import convert_time
 
 def clear_terminal():
     """Clears the terminal screen for a clean live-update effect."""
@@ -16,21 +17,21 @@ def print_live_footprint(candle: FootprintCandle):
     clear_terminal()
     
     # 1. Print the Header (Standard Candlestick Data)
-    print("=" * 63)
-    print(f" LIVE 15m CANDLE | Start Time: {candle.start_time}")
-    print("=" * 63)
+    print("=" * 64)
+    print(f" LC 15M | Start Time: {candle.start_time} | UTC7 : {convert_time(candle.start_time, utc=7)}")
+    print("=" * 64)
     print(f" Open:  {candle.open}")
     print(f" High:  {candle.high}")
     print(f" Low:   {candle.low}")
     print(f" Close: {candle.close}")
-    print("-" * 63)
+    print("-" * 64)
     print(f" Total Vol:   {candle.total_volume}")
     print(f" Total Delta: {candle.delta:+}") # The :+ forces it to show + or - sign
-    print("=" * 63)
+    print("=" * 64)
     
     # 2. Print the Footprint Levels
     print(f"{'PRICE':<12} | {'BUY VOL':<10} | {'SELL VOL':<10} | {'TOTAL VOL':<10} | {'DELTA':<10}")
-    print("-" * 63)
+    print("-" * 64)
     
     # Print the price levels sorted from highest to lowest, so we sort the keys of the levels dictionary.
     sorted_prices = sorted(candle.levels.keys(), reverse=True)
@@ -52,7 +53,7 @@ def print_live_footprint(candle: FootprintCandle):
             
         print(f"{price_str:<12} | {buy_str:<10} | {sell_str:<10} | {total_str:<10} | {delta_str:<10}")
         
-    print("=" * 63)
+    print("=" * 64)
     print("Waiting for next trade...")
 
 async def run_interface_loop(get_candle_func, refresh_rate: float = 0.5):
