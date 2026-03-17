@@ -7,7 +7,7 @@ class CheckCandleColor(BaseSignal):
     """
     def __init__(self, target_color: str):
         self.target_color = target_color.upper()
-        super().__init__(name=f"CheckCandleColor")
+        super().__init__(name=f"CheckCandleColor_{self.target_color}")
 
     def evaluate(self, candle: FootprintCandle) -> SignalResult:
         is_green = candle.close > candle.open

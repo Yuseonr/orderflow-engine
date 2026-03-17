@@ -1,3 +1,4 @@
+import asyncio
 from core.models import FootprintCandle
 from signals.base_signal import BaseSignal
 from utils.convert_time import convert_time
@@ -19,20 +20,35 @@ class SignalManager:
         self.signals.append(signal)
         ENGINE_LOGGER.info(f"Registered Signal: {signal.name}")
 
-    def evaluate_all(self, closed_candle: FootprintCandle):
+    def evaluate_all(self, candle: FootprintCandle):
         """
-        Passes candle data to every registered signal.
+        Passes candle data to every registered Strategy.
         """
-        for signal in self.signals:
+        for strategy in self.signals:
             try:
-                result = signal.evaluate(closed_candle)
+                result = strategy.evaluate_with_cache(candle)
+                
                 if result.is_triggered:
-
-                    # Can add other alrt mechanism here like Telegram, Discord. 
+            
                     SIGNAL_LOGGER.info(
-                        f"[SIGNAL ALERT] {convert_time(result.timestamp,7)} | {result.signal_name} "
+                        f"[SIGNAL ALERT] {convert_time(result.timestamp, 7)} | {result.signal_name} "
                         f"| {result.direction} | {result.message}"
                     )
 
+                    payload = {
+                        "pair": "BTCUSDT", 
+                        "timeframe": "15m",
+                        "signal": {
+                            "name": result.signal_name,
+                            "direction": result.direction,
+                            "timestamp": result.timestamp
+                        },
+                        "triggers_met": result.Anchor_trigger,
+                        "market_context": result.Data_Context,
+                        "candle": candle.to_dict()
+                    }
+
+                    print(payload)
+
             except Exception as e:
-                ENGINE_LOGGER.error(f"Error evaluating signal {signal.name}: {e}")
+                ENGINE_LOGGER.error(f"Error evaluating strategy {strategy.name}: {e}")

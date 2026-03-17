@@ -5,7 +5,8 @@ from decimal import Decimal
 from streams.binance_client import BinanceWebsocketClient
 from aggregator.footprint_builder import FootprintBuilder
 from utils.interface import run_interface_loop
-from signals import SignalManager, PocWickSignal
+from signals import SignalManager
+from signals.strategy.BullishPocWick import BullishPocOnWick
 
 # --- CONFIGURATION ---
 SYMBOL = "btcusdt"              # symbol to subscribe to (e.g., 'btcusdt' or 'ethusdt')
@@ -20,7 +21,7 @@ async def main():
 
     # Signal Manager
     signal_manager = SignalManager()
-    signal_manager.register(PocWickSignal())
+    signal_manager.register(BullishPocOnWick())
     
     # Aggregator
     # We pass our display function as the callback. Every time a trade is 

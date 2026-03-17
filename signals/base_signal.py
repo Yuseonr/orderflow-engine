@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from core.models import FootprintCandle
+from typing import Dict
 
 @dataclass
 class SignalResult:
@@ -13,6 +14,13 @@ class SignalResult:
     is_triggered: bool           # True if the setup is found, False otherwise
     direction: Optional[str]     # 'BULLISH', 'BEARISH', or None
     message: str = ""            # String to log or display when the signal is triggered
+
+    """
+    Anchor + data
+    """
+
+    Anchor_trigger: Dict[str, str] = field(default_factory=dict)
+    Data_Context : Dict[str, str] = field(default_factory=dict)
 
 class BaseSignal(ABC):
     """

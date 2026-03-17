@@ -12,7 +12,7 @@ class CheckPocLocation(BaseSignal):
     def __init__(self, target_wick: str, cal_poc: BaseSignal):
         self.target_wick = target_wick.upper()
         self.cal_poc = cal_poc
-        super().__init__(name=f"CheckPocLocation")
+        super().__init__(name=f"CheckPocLocation_{self.target_wick}_with_{self.cal_poc.name}")
 
     def evaluate(self, candle: FootprintCandle) -> SignalResult:
 
