@@ -6,7 +6,7 @@ from streams.binance_client import BinanceWebsocketClient
 from aggregator.footprint_builder import FootprintBuilder
 from utils.interface import run_interface_loop
 from signals import SignalManager
-from signals.strategy.BullishPocWick import BullishPocOnWick
+from signals.strategy.BullishPocOnWick import BullishPocOnWick
 
 # --- CONFIGURATION ---
 SYMBOL = "btcusdt"              # symbol to subscribe to (e.g., 'btcusdt' or 'ethusdt')

@@ -1,12 +1,12 @@
 from signals.base_strategy import BaseStrategy
-from signals.atomic.CalculatePoc import CalculatePoc
-from signals.atomic.CheckCandleColor import CheckCandleColor
-from signals.atomic.CheckPocLocation import CheckPocLocation
-from signals.atomic.IsNewYorkSession import IsNewYorkSession
+from signals.atomic import (CalculatePoc, 
+                            CheckCandleColor, 
+                            CheckPocLocation ,
+                            IsNewYorkSession)
 
 class BullishPocOnWick(BaseStrategy):
     def __init__(self):
-        super().__init__(name="BULLISH_TRAPPED_POC", direction="BULLISH")
+        super().__init__(name="BULLISH_POC_ON_WICK", direction="BULLISH")
 
         poc_calc = CalculatePoc()
         self.anchor_conditions = [
