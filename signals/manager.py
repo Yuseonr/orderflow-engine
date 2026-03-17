@@ -2,6 +2,7 @@ import asyncio
 from core.models import FootprintCandle
 from signals.base_signal import BaseSignal
 from utils.convert_time import convert_time
+from utils.AsukaWebhook import send_to_asuka
 from utils.logger import ENGINE_LOGGER, SIGNAL_LOGGER
 
 class SignalManager:
@@ -48,7 +49,7 @@ class SignalManager:
                         "candle": candle.to_dict()
                     }
 
-                    print(payload)
+                    asyncio.create_task(send_to_asuka(payload))
 
             except Exception as e:
                 ENGINE_LOGGER.error(f"Error evaluating strategy {strategy.name}: {e}")
