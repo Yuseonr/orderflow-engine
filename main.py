@@ -41,7 +41,7 @@ async def main():
 
     # Terminal UI Task 
     # This runs concurrently with the websocket listener. It continuously fetches the latest candle from the builder and prints it.
-    interface_task = asyncio.create_task(run_interface_loop(get_candle_func=builder.get_current_candle, refresh_rate=refresh_rate))
+    # interface_task = asyncio.create_task(run_interface_loop(get_candle_func=builder.get_current_candle, refresh_rate=refresh_rate))
     
     # Start the Event Loop
     try:
@@ -50,7 +50,7 @@ async def main():
     except KeyboardInterrupt:
         print("\nShutting down engine...")
     finally:
-        interface_task.cancel()
+        # interface_task.cancel()
         ws_client.stop()
 
 if __name__ == "__main__":

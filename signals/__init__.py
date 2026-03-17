@@ -1,2 +1,2 @@
 from .manager import SignalManager
-from .poc_wick import PocWickSignal
+from .atomic.pocWickAtom import PocWickSignal

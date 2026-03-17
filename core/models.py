@@ -53,6 +53,7 @@ class FootprintCandle:
     and contains all the individual FootprintLevels inside a dictionary.
     """
     start_time: int  # Millisecond timestamp marking the exact start of this 15m window
+    cache: Dict[str, any] = field(default_factory=dict) # Signal Result Cache to store intermediate calculations 
     
     # Standard Candlestick Data
     open: Decimal = Decimal('0')

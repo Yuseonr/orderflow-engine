@@ -28,3 +28,15 @@ class BaseSignal(ABC):
         :return: A standardized SignalResult object.
         """
         pass
+
+    def evaluate_with_cache(self, candle: FootprintCandle) -> SignalResult:
+        """
+        Check cache first\n
+        if the result for this signal already exists in the candle's cache, return it.\n
+        Otherwise, call the evaluate method, store the result in the cache, and return it.
+        """
+        if self.name in candle.cache:
+            return candle.cache[self.name]
+        result = self.evaluate(candle)
+        candle.cache[self.name] = result
+        return result
