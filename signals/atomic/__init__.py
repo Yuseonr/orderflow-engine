@@ -2,3 +2,6 @@ from .CalculatePoc import CalculatePoc
 from .CheckCandleColor import CheckCandleColor
 from .CheckPocLocation import CheckPocLocation
 from .IsNewYorkSession import IsNewYorkSession
+from .CalculatePocGaussian import CalculatePocGaussian
+from .CalculateValueArea import CalculateValueArea
+from .CheckTrappedValueArea import CheckTrappedValueArea

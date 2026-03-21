@@ -10,7 +10,7 @@
 
 | Atom & Class Name              | Meaning                                  | Need init input ? |
 |--------------------------------|------------------------------------------|-------------|
-| `Calculate{Value}{Modifier}`   | Calculated value (usually a float)       | Optional    |
+| `Calculate{Value}{Modifier}`   | Calculated value (usually a Decimal)       | Optional    |
 | `Is{Condition}{Modifier}`      | Boolean condition (True or False)        | No          |
 | `Check{Condition}{Modifier}`   | Boolean condition (True or False)        | Yes         |
 
@@ -23,7 +23,9 @@
 
 | Atom & Class Name | Input (`__init__`) | Cached | Type | Desc |
 | :--- | :--- | :--- | :--- | :--- |
-| `CalculatePoc` | None | `poc_price` | `float` | Finds the highest volume price node. |
+| `CalculatePoc` | None | `poc_price` | `Decimal` | Finds the highest volume price node. |
+| `CalculatePocGaussian` | None | `poc_price_gaussian` | `Decimal` | Finds the highest volume price node after applying a Gaussian convolution. |
+| `CalculateValueArea` | `cal_poc` (CalculatePoc() or CalculatePocGaussian()), `value_area_pct` (str '0.70' for 70%) | `value_area_high`, `value_area_low` | `Decimal` | Calculates the Value Area High and Low based on the specified percentage of total volume. |
 
 <br>
 
@@ -40,4 +42,4 @@
 | Atom & Class Name | Input (`__init__`) | Output | Desc |
 | :--- | :--- | :--- | :--- |
 | `CheckCandleColor` | `target_color` ("GREEN", "RED", "DOJI")| `bool` | `True` if actual color == target color. |
-| `CheckPocLocation` | `target_wick` ("UPPER", "LOWER", "BODY"), `cal_poc` (CalculatePoc() or CalculatePocProminance()) | `bool` | `True` if POC is in the target wick. |
+| `CheckPocLocation` | `target_wick` ("UPPER", "LOWER", "BODY"), `cal_poc` (CalculatePoc() or CalculatePocGaussian()) | `bool` | `True` if POC is in the target wick. |

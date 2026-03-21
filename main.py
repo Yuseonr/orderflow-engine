@@ -7,6 +7,8 @@ from aggregator.footprint_builder import FootprintBuilder
 from utils.interface import run_interface_loop
 from signals import SignalManager
 from signals.strategy.BullishPocOnWick import BullishPocOnWick
+from signals.strategy.BearishTrappedVA import BearishTrappedVA
+from signals.strategy.BullishTrappedVA import BullishTrappedVA
 
 # --- CONFIGURATION ---
 SYMBOL = "btcusdt"              # symbol to subscribe to (e.g., 'btcusdt' or 'ethusdt')
@@ -22,6 +24,8 @@ async def main():
     # Signal Manager
     signal_manager = SignalManager()
     signal_manager.register(BullishPocOnWick())
+    signal_manager.register(BearishTrappedVA())
+    signal_manager.register(BullishTrappedVA())
     
     # Aggregator
     # We pass our display function as the callback. Every time a trade is 
