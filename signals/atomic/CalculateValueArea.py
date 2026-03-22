@@ -7,7 +7,7 @@ class CalculateValueArea(BaseSignal):
     Calculates the Value Area High (VAH) and Value Area Low (VAL)\n
     based on a specified percentage of total volume around the Point of Control (POC).
     """
-    def __init__(self, cal_poc: BaseSignal, value_area_pct: str = '0.70'):
+    def __init__(self, cal_poc: BaseSignal, value_area_pct: str):
         self.cal_poc = cal_poc
         super().__init__(name=f"CalculateValueArea_{self.cal_poc.name}")
         self.value_area_pct = Decimal(value_area_pct)
