@@ -52,11 +52,15 @@ async def main():
     try:
         # This will run forever, listening to Binance and updating the terminal
         await ws_client.start()
-    except KeyboardInterrupt:
+    except asyncio.CancelledError:
         print("\nShutting down engine...")
+        raise
     finally:
         # interface_task.cancel()
         ws_client.stop()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+ try:
+     asyncio.run(main())
+ except KeyboardInterrupt:
+     pass
