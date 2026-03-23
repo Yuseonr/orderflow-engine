@@ -6,6 +6,7 @@ from streams.binance_client import BinanceWebsocketClient
 from aggregator.footprint_builder import FootprintBuilder
 from utils.interface import run_interface_loop
 from signals import SignalManager
+from utils.AsukaWebhook import webhook_worker
 from signals.strategy.BullishPocOnWick import BullishPocOnWick
 from signals.strategy.BearishTrappedVA import BearishTrappedVA
 from signals.strategy.BullishTrappedVA import BullishTrappedVA
@@ -48,6 +49,9 @@ async def main():
     # This runs concurrently with the websocket listener. It continuously fetches the latest candle from the builder and prints it.
     # interface_task = asyncio.create_task(run_interface_loop(get_candle_func=builder.get_current_candle, refresh_rate=refresh_rate))
     
+    # Webhook Worker Task
+    webhook_task = asyncio.create_task(webhook_worker(signal_manager.webhook_queue))
+    
     # Start the Event Loop
     try:
         # This will run forever, listening to Binance and updating the terminal
@@ -58,6 +62,7 @@ async def main():
     finally:
         # interface_task.cancel()
         ws_client.stop()
+        webhook_task.cancel()
 
 if __name__ == "__main__":
  try:

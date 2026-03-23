@@ -57,7 +57,8 @@ class FootprintBuilder:
                 open=trade.price,
                 high=trade.price,
                 low=trade.price,
-                close=trade.price
+                close=trade.price,
+                tick_size=self.tick_size
             )
 
         # 3. UPDATE OHLC (Open, High, Low, Close)

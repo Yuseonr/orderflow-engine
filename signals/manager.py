@@ -2,7 +2,7 @@ import asyncio
 from core.models import FootprintCandle
 from signals.base_signal import BaseSignal
 from utils.convert_time import convert_time
-from utils.AsukaWebhook import send_to_asuka
+from utils.AsukaWebhook import send_to_asuka, webhook_worker
 from utils.logger import ENGINE_LOGGER, SIGNAL_LOGGER
 
 class SignalManager:
@@ -13,6 +13,7 @@ class SignalManager:
     """
     def __init__(self):
         self.signals: list[BaseSignal] = []
+        self.webhook_queue = asyncio.Queue()
 
     def register(self, signal: BaseSignal):
         """
@@ -27,7 +28,7 @@ class SignalManager:
         """
         for strategy in self.signals:
             try:
-                result = strategy.evaluate_with_cache(candle)
+                result = strategy.evaluate(candle)
                 
                 if result.is_triggered:
             
@@ -49,7 +50,7 @@ class SignalManager:
                         "candle": candle.to_dict()
                     }
 
-                    asyncio.create_task(send_to_asuka(payload))
+                    self.webhook_queue.put_nowait(payload)
 
             except Exception as e:
                 ENGINE_LOGGER.error(f"Error evaluating strategy {strategy.name}: {e}")

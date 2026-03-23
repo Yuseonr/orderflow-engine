@@ -9,7 +9,7 @@ class CalculateValueArea(BaseSignal):
     """
     def __init__(self, cal_poc: BaseSignal, value_area_pct: str):
         self.cal_poc = cal_poc
-        super().__init__(name=f"CalculateValueArea_{self.cal_poc.name}")
+        super().__init__(name=f"CalculateValueArea_{self.cal_poc.name}_{value_area_pct}")
         self.value_area_pct = Decimal(value_area_pct)
         self.cache_key_vah = "value_area_high"
         self.cache_key_val = "value_area_low"
@@ -25,7 +25,7 @@ class CalculateValueArea(BaseSignal):
             return SignalResult(self.name, candle.start_time, False, None, "Missing POC")
 
         if self.cache_key_vah not in candle.cache or self.cache_key_val not in candle.cache:
-            tick_size = getattr(candle, 'tick_size', None)
+            tick_size = candle.tick_size
             if tick_size is None:
                 return SignalResult(self.name, candle.start_time, False, None, "Missing tick size for Value Area calculation")
             
@@ -40,7 +40,7 @@ class CalculateValueArea(BaseSignal):
             val = poc_price
             
             poc_level = candle.levels.get(poc_price)
-            current_volume = getattr(poc_level, 'volume', poc_level) if poc_level else Decimal('0')
+            current_volume = poc_level.total_volume if poc_level else Decimal('0')
 
             while current_volume < target_volume:
                 price_up = vah + tick_size
@@ -50,10 +50,10 @@ class CalculateValueArea(BaseSignal):
                     break
 
                 level_up = candle.levels.get(price_up)
-                vol_up = getattr(level_up, 'volume', level_up) if level_up else Decimal('0')
+                vol_up = level_up.total_volume if level_up else Decimal('0')
 
                 level_down = candle.levels.get(price_down)
-                vol_down = getattr(level_down, 'volume', level_down) if level_down else Decimal('0')
+                vol_down = level_down.total_volume if level_down else Decimal('0')
 
                 if vol_up > vol_down:
                     vah = price_up

@@ -65,6 +65,9 @@ class FootprintCandle:
     total_volume: Decimal = Decimal('0')
     total_buy_volume: Decimal = Decimal('0')
     total_sell_volume: Decimal = Decimal('0')
+
+    # tick size
+    tick_size: Decimal = Decimal('1') 
     
     # The Orderflow Dictionary: Maps a Price (Decimal) to its FootprintLevel.
     # Use a dictionary because checking if a price exists is an O(1) operation,

@@ -27,7 +27,7 @@ class CalculatePocGaussian(BaseSignal):
        
         if self.cache_key not in candle.cache:
             smoothed_profile = {}
-            tick_size = getattr(candle, 'tick_size', None)
+            tick_size = candle.tick_size 
 
             if not tick_size:
                 return SignalResult(self.name, candle.start_time, False, None, "Missing tick size for Gaussian smoothing")
@@ -37,15 +37,15 @@ class CalculatePocGaussian(BaseSignal):
 
             for target_price, level_data in candle.levels.items():
                 
-                raw_volume = getattr(level_data, 'volume', level_data)
+                raw_volume = level_data.total_volume
                 price_below = target_price - tick_size
                 price_above = target_price + tick_size
                 
                 level_below = candle.levels.get(price_below)
-                vol_below = getattr(level_below, 'volume', level_below) if level_below else Decimal('0')
+                vol_below = level_below.total_volume if level_below else Decimal('0')
                 
                 level_above = candle.levels.get(price_above)
-                vol_above = getattr(level_above, 'volume', level_above) if level_above else Decimal('0')
+                vol_above = level_above.total_volume if level_above else Decimal('0')
 
                 smoothed_vol = (
                     (vol_below * self.weight_lower) + 
