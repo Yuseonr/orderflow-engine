@@ -43,3 +43,4 @@
 | :--- | :--- | :--- | :--- |
 | `CheckCandleColor` | `target_color` ("GREEN", "RED", "DOJI")| `bool` | `True` if actual color == target color. |
 | `CheckPocLocation` | `target_wick` ("UPPER", "LOWER", "BODY"), `cal_poc` (CalculatePoc() or CalculatePocGaussian()) | `bool` | `True` if POC is in the target wick. |
+| `CheckTrappedValueArea` | `target_wick` ("UPPER", "LOWER"), `cal_va` (CalculateValueArea()) | `bool` | `True` if value area is in the target wick.|
